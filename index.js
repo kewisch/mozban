@@ -4,7 +4,6 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  * Portions Copyright (C) Philipp Kewisch, 2019 */
 
-var jpickle = require("jpickle");
 var fs = require("fs");
 var os = require("os");
 var path = require("path");
@@ -26,7 +25,6 @@ function waitForStdin() {
   });
 }
 
-
 class AMOSession {
   constructor() {
     this.jar = request.jar();
@@ -38,8 +36,8 @@ class AMOSession {
     this.jar.setCookie(cookie, "https://addons-internal.prod.mozaws.net");
   }
 
-  loadPythonCookies(cookiepath) {
-    var cookiedata = jpickle.loads(fs.readFileSync(cookiepath, "utf-8"));
+  loadCookies(cookiepath) {
+    var cookiedata = JSON.parse(fs.readFileSync(cookiepath, "utf-8"));
     for (let [name, value] of Object.entries(cookiedata)) {
       let cookie = this.request.cookie(`${name}=${value}`);
       this.jar.setCookie(cookie, "https://addons-internal.prod.mozaws.net");
@@ -101,7 +99,7 @@ class UserAdminPage {
 (async function() {
   let session = new AMOSession();
   try {
-    session.loadPythonCookies(path.join(os.homedir(), ".amo_cookie"));
+    session.loadCookies(path.join(os.homedir(), ".amo_cookie"));
   } catch (e) {
     console.error("Could not load session cookie from pyamo, please log in there");
     return;
@@ -133,4 +131,4 @@ class UserAdminPage {
       return;
     }
   }
-})();
+})().catch((e) => console.error(e));

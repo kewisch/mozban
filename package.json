@@ -1,0 +1,15 @@
+{
+  "name": "mozban",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": "index.js",
+  "author": "Philipp Kewisch <mozilla@kewis.ch>",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "jpickle": "^0.4.1",
+    "jsdom": "^15.0.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  }
+}
